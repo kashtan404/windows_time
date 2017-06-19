@@ -1,0 +1,4 @@
+---
+
+time_zone: "Russian Standard Time"
+ntp_server: time.windows.com

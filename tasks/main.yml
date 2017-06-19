@@ -1,0 +1,17 @@
+---
+
+- name: Set timezone
+  win_timezone:
+    timezone: {{ time_zone }}
+
+- name: Enable windows time
+  win_service:
+    name: w32time
+    start_mode: auto
+    state: started
+
+- name: Configure windows time
+  win_shell: w32tm /config /update /manualpeerlist:{{ ntp_server }} /syncfromflags:MANUAL
+
+- name: Create scheduled task for resync every 60min
+  win_shell: Register-ScheduledJob -ScriptBlock { w32tm /resync /nowait } -Name windows_time_resync -RunAs32 -ScheduledJobOption (New-ScheduledJobOption -RunElevated -ContinueIfGoingOnBattery -StartIfOnBattery) -Trigger (New-JobTrigger -Once -At (Get-Date).Date -RepeatIndefinitely -RepetitionInterval (New-TimeSpan -Minutes 60))
