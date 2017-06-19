@@ -2,6 +2,7 @@ windows_time
 =========
 
 This role can be used for enable and configure windows time.
+Creates scheduled task to sync time every hour.
 
 Requirements
 ------------
